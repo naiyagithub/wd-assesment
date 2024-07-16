@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Interval Calculator</title>
+
+   
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+  
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    
+   
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Date Interval Calculator</h2>
+        <form>
+            <div class="form-group">
+                <label for="start-date">From</label>
+                <div class="input-group date" id="start-date">
+                    <input type="text" class="form-control" placeholder="YYYY-MM-DD">
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="end-date">To</label>
+                <div class="input-group date" id="end-date">
+                    <input type="text" class="form-control" placeholder="YYYY-MM-DD">
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" id="calculate-interval">Calculate Interval</button>
+        </form>
+        <div class="mt-3">
+            <p id="result" class="p-3 text-white bg-primary"></p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+      
+            $('#start-date').datetimepicker({
+                format: 'YYYY-MM-DD'
+            });
+            $('#end-date').datetimepicker({
+                format: 'YYYY-MM-DD',
+                useCurrent: false 
+            });
+
+           
+            $('#start-date .input-group-append').click(function(){
+                $('#start-date').data("DateTimePicker").show();
+            });
+            $('#end-date .input-group-append').click(function(){
+                $('#end-date').data("DateTimePicker").show();
+            });
+
+            $("#start-date").on("dp.change", function (e) {
+                $('#end-date').data("DateTimePicker").minDate(e.date);
+            });
+            $("#end-date").on("dp.change", function (e) {
+                $('#start-date').data("DateTimePicker").maxDate(e.date);
+            });
+
+            
+            $('#calculate-interval').click(function(){
+                var startDate = $('#start-date').data("DateTimePicker").date();
+                var endDate = $('#end-date').data("DateTimePicker").date();
+
+                if(startDate && endDate){
+                    var days = endDate.diff(startDate, 'days');
+                    var weeks = endDate.diff(startDate, 'weeks');
+                    var months = endDate.diff(startDate, 'months');
+                    var years = endDate.diff(startDate, 'years');
+                    
+                    $('#result').html(
+                        'Date Interval Between <br>' + startDate.format('YYYY-MM-DD') + ' to ' + endDate.format('YYYY-MM-DD') + '<br>' +
+                        
+                        'In Days: ' + days + ' days<br>' +
+                        'In Weeks: ' + weeks + ' weeks<br>' +
+                        'In Months: ' + months + ' months<br>' +
+                        'In Years: ' + years + ' years.'
+                    );
+                } else {
+                    $('#result').text('Please select both start and end dates.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
